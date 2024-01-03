@@ -1,63 +1,71 @@
-# Objective 1: Import modules os and csv
+# Module 3 _Challenge3:PyBank
+# Objective 1: Import modules s and csv
 import os
 import csv
+# Objetcive 2: Set the path for the csv file in PyBAnk folder
+PyBankcsv= os.path.join("Resources" , "budget_data.csv")
 
-# Objective 2: Set the path for the CSV file in PyPollcsv
+# Objective 3: Creating the lists
+profit=[]
+monthlyChanges=[]
+monthlyChangesProfits=[]
+date=[]
 
-PyPollcsv = os.path.join("Resources","election_data.csv")
-
-# Objective 3: Create the lists to store data.
-
-count = 0
-candidate_name = []
-unique_candidate = []
-vote_count = []
-vote_percent = []
-
-# Open the CSV using the set path PyPollcsv
-
-with open(PyPollcsv, newline="") as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=",")
-    csv_header = next(csvreader)
-
-    for row in csvreader:
-        # Count the total number of votes
-        count = count + 1
-        candidate_name.append(row[2])
-        
-    for x in set(candidate_name):
-        unique_candidate.append(x)
-        # y is the total number of votes per candidate
-        y = candidate_name.count(x)
-        vote_count.append(y)
-        # z is the percent of total votes per candidate
-        z = (y/count)*100
-        vote_percent.append(z)
-        
-    winning_vote_count = max(vote_count)
-    winner = unique_candidate[vote_count.index(winning_vote_count)]
-    
-
-print("-------------------------")
-print("Election Results")   
-print("-------------------------")
-print("Total Votes :" + str(count))    
-print("-------------------------")
-for i in range(len(unique_candidate)):
-            print(unique_candidate[i] + ": " + str(vote_percent[i]) +"% (" + str(vote_count[i])+ ")")
-print("-------------------------")
-print("The winner is: " + winner)
-print("-------------------------")
+# The variables
+count=0
+totalprofit=0
+initialprofit=0
 
 
-with open('election_results.txt', 'w') as text:
-    text.write("Election Results\n")
-    text.write("---------------------------------------\n")
-    text.write("Total Vote: " + str(count) + "\n")
-    text.write("---------------------------------------\n")
-    for i in range(len(set(unique_candidate))):
-        text.write(unique_candidate[i] + ": " + str(vote_percent[i]) +"% (" + str(vote_count[i]) + ")\n")
-    text.write("---------------------------------------\n")
-    text.write("The winner is: " + winner + "\n")
-    text.write("---------------------------------------\n")
+# Open the csv using path PyBankcsv
+with open (PyBankcsv, newline="") as csvfile:
+    csvreader= csv.reader(csvfile, delimiter=",")
+    csvheader= next(csvreader)
+    firstRow=next(csvreader)
+    count +=1
+    totalprofit += int(firstRow[1])
+    prevNet= int(firstRow[1])
+
+# using loop calculating the months with in csv reader
+
+    for row in  csvreader:
+    # Count the number in the dataset
+        count += 1
+        # Calculating the total and change profits
+        totalprofit += int(row[1])
+        monthlyChanges= int(row[1])
+        prevnet= int (row[1])
+        monthlyChangesProfits += [monthlyChanges]
+        date += (row[0])
+
+ # Calculating the average change in profits
+totalChangeProfits= sum(monthlyChangesProfits)/len(monthlyChangesProfits)
+
+# The greatest increase and decrease in profits
+greatestIncreaseProfits= max(monthlyChangesProfits)
+greatestdecreaseProfits= min(monthlyChangesProfits)
+
+increaseDate= date[monthlyChangesProfits.index(greatestIncreaseProfits)]
+decreaseDate=date[monthlyChangesProfits.index(greatestdecreaseProfits)]
+
+print(greatestIncreaseProfits)
+print("----------------------------")
+
+# Print to a text file: financialAnalysis.txt
+with open('financialAnalysis.txt','w') as text:
+
+    text.write("--------------------------------\n")
+    text.write("financial Analysis"+ "\n")
+    text.write("----------------\n\n")
+    text.write("Total Months:"+ str(count)+"\n")
+    text.write("Total Profits:"+ "$"+ str(totalprofit)+ "\n")
+    text.write(f" Average Change: $ {totalChangeProfits:2f}\n")
+    text.write("Greatest Increase in Profits:"+str(increaseDate)+"($"+str(greatestIncreaseProfits)+")\n")
+    text.write("Greatest Decrease in Profits:"+str(decreaseDate)+"($"+str(greatestdecreaseProfits)+")\n")
+    text.write("\n")
+
+    text.write("----------------------\n")
+
+
+
 
